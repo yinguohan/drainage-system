@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DrainageSystem</title>
+    <script language="JavaScript" src="jquery/jquery.min.js"></script>
+    <script language="JavaScript" src="jquery/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+</head>
+<style>
+    .sp{
+        color: #d43f3a;
+        font-weight:bold;
+        font-size: 23px;
+    }
+    #a{
+        color: aliceblue;
+        font-size: 30px;
+    }
+</style>
+<body>
+<script>
+    $(function(){
+        $('#submit-btn').click(function(){
+            var sn=$('#disabledTextInput').val();
+            var province=$('#disabledSelect').val();
+
+            if (sn !="" && province !=""){
+                $.ajax({
+                    type: "get",
+                    url: "drainage/seller",
+                    data: {sn:sn,province:province},
+
+                    success: function(map){
+                        //alert("aa"+map)
+                        for(var key in map){
+                            console.log("key：" + key + ",seller：" + map[key]);
+                            //alert("22-"+key+"-"+map[key].sCompanyName);
+                            //ygh.判断选择城市
+                            var a = "";
+                            if (province == "北京"){
+                                var a = "北京市用户请检查A34H";
+                            }else if(province == "上海"){
+                                var a = "上海市用户请检查A34H";
+                            }else if(province == "四川"){
+                                var a = "成都市用户请检查A34H";
+                            }else if(province == "广东") {
+                                var a = "广州市用户请检查A34H";
+                            }
+                        }
+                        var A34H = a;
+                        //alert("key:"+key)
+                        if (key == 0){
+                            if (map[key] != null){
+                                var A34H = "";
+                                var companyName = map[key].sCompanyName;
+                                var mailContacts = map[key].sMailContacts;
+                                var mailContactNumber = map[key].sMailContactNumber;
+                                var mailboxContact = map[key].sMailboxContact;
+                            }else {
+
+                                var A34H = a;
+                                var companyName = "SUBK";
+                                var mailContacts = "";
+                                var mailContactNumber = "";
+                                var mailboxContact = "";
+                            }
+                        }else {
+                            //alert("输入的序列号有误！")
+                            alert("您查找的SN未找到经销商信息，请派到SUBK")
+                            var A34H = a;
+                            var companyName = "SUBK";
+                            var mailContacts = "";
+                            var mailContactNumber = "";
+                            var mailboxContact = "";
+                        }
+                        $("#A34H").text(a);
+                        $("#companyName").text(companyName);
+                        $("#mailContacts").text(mailContacts);
+                        $("#mailContactNumber").text(mailContactNumber);
+                        $("#mailboxContact").text(mailboxContact);
+
+                    },
+
+                    error:function(msg){
+                        console.log(msg);
+                    }
+                });
+            } else{
+                alert("请输入产品号和地区！")
+            }
+
+
+        });
+    })
+</script>
+<a class="btn btn-default btn-lg btn-block " href="https://oss.hpcloud.hp.com/os/SalesAdminView.tcl" style="background: #c4e3f3"id="a">Click to enter SANDY System...</a>
+<div class="container">
+
+    <div class="col-lg-2"></div>
+
+    <div class="col-lg-8" style="margin-top: 40px;">
+        <fieldset>
+            <div class="form-group">
+                <label for="disabledTextInput">产品序列号：</label>
+                <input type="text" id="disabledTextInput" class="form-control" placeholder="请输入序列号...">
+            </div>
+            <div class="form-group">
+                <label for="disabledSelect">商品省份：</label>
+                <select id="disabledSelect" class="form-control">
+                    <option value="">请选择地区...</option>
+                    <option value="广东">广东</option>
+                    <option value="陕西">陕西</option>
+                    <option value="天津">天津</option>
+                    <option value="山东">山东</option>
+                    <option value="河南">河南</option>
+                    <option value="吉林">吉林</option>
+                    <option value="重庆">重庆</option>
+                    <option value="江苏">江苏</option>
+                    <option value="河北">河北</option>
+                    <option value="浙江">浙江</option>
+                    <option value="辽宁">辽宁</option>
+                    <option value="四川">四川</option>
+                    <option value="黑龙江">黑龙江</option>
+                    <option value="甘肃">甘肃</option>
+                    <option value="山西">山西</option>
+                    <option value="北京">北京</option>
+                    <option value="湖北">湖北</option>
+                    <option value="上海">上海</option>
+                    <option value="内蒙古">内蒙古</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
+        </fieldset>
+        <div class="span" style="margin-top: 30px;">
+            <p><span id="A34H" class="sp"></span></p>
+            <p>经销商：<span id="companyName"></span></p>
+            <p>派单联系人：<span id="mailContacts"></span></p>
+            <p>派单联系电话：<span id="mailContactNumber"></span></p>
+            <p>派单联系邮箱：<span id="mailboxContact"></span></p>
+        </div>
+    </div>
+
+    <div class="col-lg-2"></div>
+
+</div>
+
+</body>
+</html>
